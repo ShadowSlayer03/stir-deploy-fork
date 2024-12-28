@@ -29,6 +29,10 @@ const trendSchema = new mongoose.Schema({
 });
 const Trend = mongoose.model("Trend", trendSchema);
 
+app.get("/",(req,res)=>{
+  res.send("Web Scrapy Working Successfully!")
+})
+
 // Scrape trends and save to MongoDB
 app.get("/api/scrape", async (req, res) => {
   try {

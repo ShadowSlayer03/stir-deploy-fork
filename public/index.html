@@ -107,7 +107,7 @@
       document.getElementById('timestamp').innerText = timestamp;
 
       try {
-        const response = await fetch('http://localhost:3000/scrape');
+        const response = await fetch('https://stir-deploy-fork.vercel.app:3000/scrape');
         if (!response.ok) throw new Error('Failed to run script.');
 
         const scrapeResult = await response.json();
@@ -136,7 +136,7 @@
       document.getElementById('timestamp').innerText = timestamp;
 
       try {
-        const response = await fetch('http://localhost:3000/scrape');
+        const response = await fetch('https://stir-deploy-fork.vercel.app:3000/scrape');
         if (!response.ok) throw new Error('Failed to run query.');
 
         const scrapeResult = await response.json();
@@ -162,7 +162,7 @@
     // Handle "Show JSON Data" button
     document.getElementById('fetchJson').addEventListener('click', async () => {
       try {
-        const response = await fetch('http://localhost:3000/trends');
+        const response = await fetch('https://stir-deploy-fork.vercel.app:3000/trends');
         if (!response.ok) throw new Error('Failed to fetch JSON.');
 
         const jsonData = await response.json();

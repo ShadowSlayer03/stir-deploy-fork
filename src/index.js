@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 
 // CORS Configuration
 const corsOptions = {
-  origin: ['https://stir-ykbo.vercel.app', 'http://localhost:3000'], // Allow multiple origins
+  origin: ['https://stir-ykbo.vercel.app', 'https://stir-deploy-fork.vercel.app:3000'], // Allow multiple origins
   optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));
@@ -71,5 +71,5 @@ app.get('/trends', async (req, res) => {
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on https://stir-deploy-fork.vercel.app:${PORT}`);
 });

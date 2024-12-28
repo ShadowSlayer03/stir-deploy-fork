@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 require('dotenv').config();
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -33,9 +34,12 @@ const Trend = mongoose.model('Trend', trendSchema);
 // Middleware
 app.use(express.json());
 
-app.get('/',(req,res)=>{
-  res.send("Web Scraper Working Successfully!")
-})
+app.use(express.static(path.join(__dirname, "../public")));
+
+// Route to render "index.html"
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/index.html"));
+});
 
 // Scrape trends and save them to MongoDB
 app.get('/scrape', async (req, res) => {

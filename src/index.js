@@ -33,6 +33,10 @@ const Trend = mongoose.model('Trend', trendSchema);
 // Middleware
 app.use(express.json());
 
+app.get('/',(req,res)=>{
+  res.send("Web Scraper Working Successfully!")
+})
+
 // Scrape trends and save them to MongoDB
 app.get('/scrape', async (req, res) => {
   try {

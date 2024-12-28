@@ -1,75 +1,67 @@
-const express = require('express');
-const path = require('path');
-require('dotenv').config();
-const mongoose = require('mongoose');
-const cors = require('cors');
-const scrapeTrends = require('./scrapeTrends');
+const express = require("express");
+const path = require("path");
+require("dotenv").config();
+const mongoose = require("mongoose");
+const cors = require("cors");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// CORS Configuration
-const corsOptions = {
-  origin: ['https://stir-ykbo.vercel.app', 'https://stir-deploy-fork.vercel.app:3000'], // Allow multiple origins
-  optionsSuccessStatus: 200
-};
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
-
-// MongoDB connection
 const mongodbUrl = process.env.DB_URL;
 mongoose
   .connect(mongodbUrl, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('Connection error:', err));
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.error("Connection error:", err));
 
-// Schema and Model for trends
+const corsOptions = {
+  origin: ["https://stir-deploy-fork.vercel.app"],
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
+
+app.use(express.json());
+app.use(express.static(path.join(__dirname, "../public")));
+
 const trendSchema = new mongoose.Schema({
   trend: String,
   posts: String,
-  timestamp: { type: Date, default: Date.now }
+  timestamp: { type: Date, default: Date.now },
 });
-const Trend = mongoose.model('Trend', trendSchema);
+const Trend = mongoose.model("Trend", trendSchema);
 
-// Middleware
-app.use(express.json());
-
-app.use(express.static(path.join(__dirname, "../public")));
-
-// Route to render "index.html"
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/index.html"));
-});
-
-// Scrape trends and save them to MongoDB
-app.get('/scrape', async (req, res) => {
+// Scrape trends and save to MongoDB
+app.get("/api/scrape", async (req, res) => {
   try {
+    const scrapeTrends = require("./scrapeTrends");
     const trends = await scrapeTrends();
     await Trend.deleteMany({});
-    const trendDocuments = trends.map(trend => ({
+    const trendDocuments = trends.map((trend) => ({
       trend: trend.trend,
-      posts: trend.posts
+      posts: trend.posts,
     }));
     await Trend.insertMany(trendDocuments);
-    res.json({ success: true, message: 'Trends scraped and saved successfully.', trends });
+    res.json({ success: true, message: "Trends scraped and saved successfully.", trends });
   } catch (error) {
-    console.error('Error scraping trends:', error);
-    res.status(500).json({ success: false, message: 'Failed to scrape trends', error: error.message });
+    console.error("Error scraping trends:", error);
+    res.status(500).json({ success: false, message: "Failed to scrape trends", error: error.message });
   }
 });
 
 // Fetch trends from MongoDB
-app.get('/trends', async (req, res) => {
+app.get("/api/trends", async (req, res) => {
   try {
     const trends = await Trend.find().sort({ timestamp: -1 });
-    res.json({ success: true, message: 'Trends fetched successfully.', trends });
+    res.json({ success: true, message: "Trends fetched successfully.", trends });
   } catch (error) {
-    console.error('Error fetching trends:', error);
-    res.status(500).json({ success: false, message: 'Failed to fetch trends', error: error.message });
+    console.error("Error fetching trends:", error);
+    res.status(500).json({ success: false, message: "Failed to fetch trends", error: error.message });
   }
 });
 
-// Start the server
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/index.html"));
+});
+
 app.listen(PORT, () => {
-  console.log(`Server running on https://stir-deploy-fork.vercel.app:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

@@ -14,7 +14,7 @@ mongoose
   .catch((err) => console.error("Connection error:", err));
 
 const corsOptions = {
-  origin: ["https://stir-deploy-fork.vercel.app"],
+  origin: ["https://stir-deploy-fork.vercel.app","http://localhost:3000"],
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));

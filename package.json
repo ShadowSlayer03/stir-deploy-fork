@@ -2,7 +2,7 @@
   "name": "stir",
   "version": "1.0.0",
   "description": "Web scraping with Selenium and ProxyMesh, storing the data in MongoDB, showing a list on a webpage. This repo focuses on our ability to work with web automation tools, proxies, and data extraction techniques.",
-  "main": "src/index.js",
+  "main": "index.js",
   "scripts": {
     "test": "npm start",
     "start": "node src/index.js"

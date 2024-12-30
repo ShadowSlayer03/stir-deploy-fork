@@ -34,7 +34,7 @@ app.get("/",(req,res)=>{
 })
 
 // Scrape trends and save to MongoDB
-app.get("/api/scrape", async (req, res) => {
+app.get("/scrape", async (req, res) => {
   try {
     const scrapeTrends = require("./scrapeTrends");
     const trends = await scrapeTrends();
@@ -52,7 +52,7 @@ app.get("/api/scrape", async (req, res) => {
 });
 
 // Fetch trends from MongoDB
-app.get("/api/trends", async (req, res) => {
+app.get("/trends", async (req, res) => {
   try {
     const trends = await Trend.find().sort({ timestamp: -1 });
     res.json({ success: true, message: "Trends fetched successfully.", trends });
